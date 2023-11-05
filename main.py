@@ -82,4 +82,6 @@ def clean_text(text):
     text = text.replace("\\'", "'").replace("→", "")
     return text
 
-app.run(debug=True, port=5001)
+if __name__ == "__main__":
+    # This should only be run when executing the script directly, not when running through Gunicorn
+    app.run()
