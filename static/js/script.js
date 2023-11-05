@@ -1,48 +1,83 @@
+/**
+ * Asynchronously sends data to the specified URL using POST method and returns the JSON response.
+ * @param {string} url - The URL to which the data is to be sent.
+ * @param {Object} data - The data to be sent in the request body.
+ * @returns {Promise<Object>} - The JSON response from the server.
+ */
 async function postData(url = "", data = {}) {
   const response = await fetch(url, {
     method: "POST",
+    mode: "cors",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
   });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
   return response.json();
 }
 
+/**
+ * Retrieves the text content of the currently active button.
+ * @returns {string} - The text content of the active button or an empty string if no active button is found.
+ */
 function getActiveButtonText() {
   const activeButton = document.querySelector(".serviceButton.bg-gray-700");
-  return activeButton ? activeButton.textContent : "";
+  return activeButton ? activeButton.textContent.trim() : "";
 }
 
-// Function to handle sending the question
+/**
+ * Handles sending question to server and updates UI with the response.
+ */
 async function sendQuestion() {
   let questionInput = document.getElementById("questionInput").value;
   document.getElementById("questionInput").value = "";
+
+  // Toggle visibility of the chat screen
   document.querySelector(".right2").style.display = "block";
   document.querySelector(".right1").style.display = "none";
 
-  question.innerHTML = questionInput;
+  document.getElementById("question").textContent = questionInput;
 
-  const activeText = getActiveButtonText();
-  questionInput = activeText + ': """' + questionInput + '"""';
+  // Construct the question with the active service button text if available
+  const activeServiceText = getActiveButtonText();
+  const fullQuestion = activeServiceText
+    ? `${activeServiceText}: "${questionInput}"`
+    : questionInput;
 
-  let response = await postData("/api", { question: questionInput });
-  solution.innerHTML = response.answer.content;
+  try {
+    const response = await postData("/api", { question: fullQuestion });
+    document.getElementById("solution").textContent = response.answer.content;
+  } catch (error) {
+    console.error("Error sending question:", error);
+  }
 }
 
-sendButton.addEventListener("click", function () {
-  sendQuestion();
+/* Event listeners */
+
+// Clicking send button
+const sendButton = document.getElementById("sendButton");
+sendButton.addEventListener("click", sendQuestion);
+
+// Clicking new chat button
+const newChatButton = document.getElementById("newChatButton");
+newChatButton.addEventListener("click", function() {
+  document.querySelector(".right2").style.display = "none";
+  document.querySelector(".right1").style.display = "block";
 });
 
-document
-  .getElementById("questionInput")
-  .addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      sendQuestion();
-    }
-  });
+// Submitting by hitting "enter" key
+const questionInputElem = document.getElementById("questionInput");
+questionInputElem.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    sendQuestion();
+  }
+});
 
+// Active service button clicked
 document.addEventListener("click", function (event) {
   // Check if the clicked element has the 'serviceButton' class
   if (event.target.classList.contains("serviceButton")) {
@@ -65,34 +100,18 @@ document.addEventListener("click", function (event) {
   }
 });
 
+/**
+ * Displays the chat corresponding to the given index.
+ * @param {number} index - The index of the chat to display.
+ */
 function displayChat(index) {
   const selectedChat = myChats[index];
   const questionElement = document.getElementById("question");
   const answerElement = document.getElementById("solution");
 
-  // Update the content of the question and answer elements
   questionElement.textContent = selectedChat[0];
   answerElement.textContent = selectedChat[1];
 
-  // Show the active chat screen and hide others if necessary
   document.querySelector(".right2").style.display = "block";
   document.querySelector(".right1").style.display = "none";
-  // ... any other sections you might want to hide
-}
-
-async function deleteChat(index) {
-  const response = await fetch("/delete-chat", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ index: index }),
-  });
-
-  if (response.ok) {
-    // Remove the chat from the DOM
-    document.querySelectorAll(".chat")[index].remove();
-  } else {
-    console.error("Failed to delete the chat");
-  }
 }

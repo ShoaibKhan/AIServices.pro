@@ -13,26 +13,25 @@
       }
     </style>
   </head>
-  <body class="bg-primary">
-    <div class="flex h-[100vh] text-white">
+  <body class="bg-primary text-white">
+    <!-- Main Container -->
+    <div class="flex h-[100vh]">
       <!-- Sidebar -->
       <aside class="bg-[#202123] w-2/12">
+        <!-- New Chat Button -->
         <button
+          id="newChatButton"
           class="w-[90%] py-2 m-2 px-10 space-x-2 border-white border rounded-md flex mx-4 justify-start items-center hover:opacity-70"
         >
           <!-- SVG for '+' icon -->
-          <svg
-            class="h-4 w-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" stroke="currentColor">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
           <span>New Chat</span>
         </button>
+
+        <!-- Chat List -->
         <div class="text-xs m-4 mx-8 text-gray-400">Today</div>
         <div
           id="sidebar"
@@ -56,10 +55,9 @@
               ></path>
             </svg>
             <span class="chat-text truncate">
-              {{ chat[0][:18] }}{% if chat[0]|length > 18 %}...{% endif%}
+              {{ chat[0] | truncate(25, true) }}
             </span>
             <svg
-              onclick="deleteChat({{ loop.index0 }})"
               class="h-4 w-4 text-gray-400 hidden group-hover:block"
               stroke="currentColor"
               fill="none"
@@ -134,21 +132,19 @@
           <div class="examples flex flex-col justify-center items-center">
             <!-- SVG for 'explain' icon -->
             <svg
-              class="h-6 w-6"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
+              stroke-width="1.5"
               stroke="currentColor"
+              aria-hidden="true"
+              class="h-6 w-6"
             >
-              <circle cx="12" cy="12" r="5"></circle>
-              <line x1="12" y1="1" x2="12" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="23"></line>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-              <line x1="1" y1="12" x2="3" y2="12"></line>
-              <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+              ></path>
             </svg>
 
             <h2 class="py-4">Explain</h2>
@@ -173,21 +169,22 @@
           <div class="examples flex flex-col justify-center items-center">
             <!-- SVG for 'Miscellaneous' icon -->
             <svg
-              class="h-6 w-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
               stroke="currentColor"
+              fill="none"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-6 w-6"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <circle cx="12" cy="12" r="5"></circle>
-              <line x1="12" y1="1" x2="12" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="23"></line>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-              <line x1="1" y1="12" x2="3" y2="12"></line>
-              <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              <path
+                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+              ></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
             </svg>
 
             <h2 class="py-4">Miscellaneous</h2>
@@ -311,7 +308,6 @@
     </div>
 
     <script type="text/javascript">
-      // This will make `myChats` available as a global variable in JavaScript
       var myChats = {{ myChats | tojson | safe }};
     </script>
     <script src="/static/js/script.js"></script>
