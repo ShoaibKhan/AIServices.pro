@@ -4,12 +4,12 @@ A lightweight SaaS platform that leverages OpenAI to execute specialized tasks u
 ## Usage
 
 ### Home (Familiar look, with preset services)
-![aiservices - home screen](https://github.com/ShoaibKhan/AIServices.pro/tree/main/design/v1.0/aiservices - home screen.png)
+![aiservices - home screen](https://github.com/ShoaibKhan/AIServices.pro/blob/main/design/v1.0/aiservices%20-%20home%20screen.png)
 
 ### Chat screen
-![aiservices - loading screen](https://github.com/ShoaibKhan/AIServices.pro/tree/main/design/v1.0/aiservices - loading screen.png)
+![aiservices - loading screen](https://github.com/ShoaibKhan/AIServices.pro/blob/main/design/v1.0/aiservices%20-%20loading%20screen.png)
 
-![aiservices - reply screen](https://github.com/ShoaibKhan/AIServices.pro/tree/main/design/v1.0/aiservices - reply screen.png)
+![aiservices - reply screen](https://github.com/ShoaibKhan/AIServices.pro/blob/main/design/v1.0/aiservices%20-%20reply%20screen.png)
 
 
 ## Installation
